@@ -1,0 +1,35 @@
+END-USER LICENSE AGREEMENT (EULA) FOR MAGIC ENGLISH
+
+This End-User License Agreement ("EULA") is a legal agreement between you (either an individual or a single entity) and dtongg03 for the software product identified above, which includes computer software and may include associated media, printed materials, and "online" or electronic documentation ("SOFTWARE PRODUCT").
+
+By installing, copying, or otherwise using the SOFTWARE PRODUCT, you agree to be bound by the terms of this EULA. If you do not agree to the terms of this EULA, do not install or use the SOFTWARE PRODUCT.
+
+1. GRANT OF LICENSE
+This EULA grants you the following rights:
+- Installation and Use: You may install and use an unlimited number of copies of the SOFTWARE PRODUCT.
+- Reproduction and Distribution: You may reproduce and distribute an unlimited number of copies of the SOFTWARE PRODUCT; provided that each copy shall be a true and complete copy, including all copyright and trademark notices, and shall be accompanied by a copy of this EULA.
+
+2. DESCRIPTION OF OTHER RIGHTS AND LIMITATIONS
+- You may not reverse engineer, decompile, or disassemble the SOFTWARE PRODUCT.
+- You may not rent, lease, or lend the SOFTWARE PRODUCT.
+- You may not use the SOFTWARE PRODUCT for any illegal purpose.
+
+3. API USAGE
+This software requires third-party API services (OpenAI, Ollama, etc.). You are responsible for:
+- Obtaining your own API keys
+- Complying with the API provider's terms of service
+- Any costs associated with API usage
+
+4. NO WARRANTIES
+The SOFTWARE PRODUCT is provided "AS IS" without warranty of any kind. The entire risk as to the quality and performance of the SOFTWARE PRODUCT is with you.
+
+5. LIMITATION OF LIABILITY
+In no event shall dtongg03 be liable for any damages whatsoever arising out of the use of or inability to use the SOFTWARE PRODUCT.
+
+6. PRIVACY
+This software stores data locally on your computer. No personal data is sent to the developer. However, when using AI features, your queries are sent to the configured API service provider.
+
+By clicking "I Agree" or installing this software, you acknowledge that you have read this agreement, understand it, and agree to be bound by its terms and conditions.
+
+Copyright (c) 2025 dtongg03
+All rights reserved.

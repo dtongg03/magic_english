@@ -1,0 +1,186 @@
+{
+  "app": {
+    "name": "Magic English",
+    "title": "Magic English"
+  },
+  "tabs": {
+    "vocab": "Magic Vocab",
+    "scoring": "Rate Sentence"
+  },
+  "window": {
+    "settings": "Settings",
+    "minimize": "Minimize",
+    "maximize": "Maximize",
+    "close": "Close"
+  },
+  "vocab": {
+    "search": {
+      "title": "Quick Word Search",
+      "subtitle": "AI will automatically save results to the selected database",
+      "placeholder": "Enter English word...",
+      "button": "Search",
+      "analyzing": "Analyzing..."
+    },
+    "aiResult": {
+      "title": "AI Results",
+      "empty": "No results yet. Search for a word to get started.",
+      "definition": "Definition",
+      "example": "Example",
+      "ipa": "IPA",
+      "notes": "Notes",
+      "tags": "Tags"
+    },
+    "database": {
+      "title": "Database Management",
+      "subtitle": "Select pinned folder and manage vocabulary files",
+      "select": "Select Database",
+      "selectFile": "Select vocabulary file:",
+      "new": "New Database",
+      "rename": "Rename",
+      "delete": "Delete",
+      "create": {
+        "title": "Create New Database",
+        "subtitle": "Enter JSON file name (e.g., travel.json or travel)",
+        "placeholder": "Database name",
+        "cancel": "Cancel",
+        "confirm": "Create"
+      },
+      "empty": "No databases yet. Create one to get started."
+    },
+    "words": {
+      "title": "Word List",
+      "empty": "No data in this database yet.",
+      "columns": {
+        "word": "Word",
+        "ipa": "IPA",
+        "type": "Type",
+        "cefr": "CEFR",
+        "definition": "Definition",
+        "example": "Example",
+        "notes": "Notes",
+        "tags": "Tags",
+        "actions": "Actions"
+      },
+      "actions": {
+        "view": "View",
+        "delete": "Delete"
+      }
+    },
+    "paths": {
+      "select": "Select Folder",
+      "pin": "Pin Folder",
+      "remove": "Unpin",
+      "empty": "No paths pinned yet"
+    }
+  },
+  "scoring": {
+    "input": {
+      "title": "Enter Sentence to Score",
+      "subtitle": "AI will analyze grammar, vocabulary and provide detailed score",
+      "placeholder": "Enter your English sentence to be scored and analyzed...",
+      "button": "Score",
+      "analyzing": "Analyzing..."
+    },
+    "result": {
+      "title": "Scoring Results",
+      "empty": "No results yet. Enter a sentence and click \"Score\".",
+      "noFeedback": "No overall feedback.",
+      "yourSentence": "Your Sentence:",
+      "errors": {
+        "title": "Errors Detected",
+        "count": "errors",
+        "fixTo": "Fix to:",
+        "suggestion": "Suggestion"
+      },
+      "strengths": {
+        "title": "Strengths:"
+      },
+      "improvements": {
+        "title": "Improvement Suggestions:"
+      },
+      "grammar": {
+        "title": "Grammar Analysis:",
+        "tense": "Tense:",
+        "subjectVerb": "Subject-Verb:",
+        "wordOrder": "Word Order:",
+        "articles": "Articles:"
+      },
+      "vocabulary": {
+        "title": "Vocabulary Analysis:",
+        "level": "Level:",
+        "appropriateness": "Appropriateness:",
+        "suggestions": "Better Word Choices:"
+      }
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "close": "Close",
+    "theme": {
+      "title": "Interface",
+      "light": "☀️ Light",
+      "dark": "🌙 Dark"
+    },
+    "language": {
+      "title": "Language",
+      "english": "🇬🇧 English",
+      "vietnamese": "🇻🇳 Vietnamese"
+    }
+  },
+  "modals": {
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "delete": {
+      "title": "Delete Database",
+      "message": "Delete database \"{name}\"? This action cannot be undone.",
+      "confirm": "Delete"
+    },
+    "rename": {
+      "title": "Rename Database",
+      "message": "Rename",
+      "placeholder": "New database name"
+    },
+    "unpinPath": {
+      "title": "Unpin Folder",
+      "message": "Unpin folder \"{path}\"?",
+      "confirm": "Unpin"
+    },
+    "deleteWord": {
+      "title": "Delete Word",
+      "message": "Delete word \"{word}\"?",
+      "confirm": "Delete"
+    }
+  },
+  "toasts": {
+    "success": {
+      "created": "Database created and selected",
+      "renamed": "Database renamed",
+      "deleted": "Database deleted",
+      "saved": "Word saved successfully",
+      "analyzed": "Analysis complete!",
+      "unpinned": "Folder unpinned",
+      "wordDeleted": "Deleted \"{word}\"",
+      "dbSelected": "Using DB: {name}",
+      "themeChanged": "Theme changed",
+      "scoringComplete": "Analysis complete!"
+    },
+    "error": {
+      "empty": "Please enter a value",
+      "notFound": "Database not found",
+      "noDatabase": "No database selected",
+      "cannotDelete": "Cannot delete the last database. Create another first.",
+      "cannotUnpinDefault": "Cannot unpin default application folder",
+      "failed": "Operation failed",
+      "analyzeFailed": "Could not analyze",
+      "emptySentence": "Please enter a sentence first.",
+      "scoringFailed": "Could not score. Please try again.",
+      "initFailed": "Application could not initialize."
+    },
+    "info": {
+      "noResults": "No results found"
+    }
+  },
+  "footer": {
+    "copyright": "© 2025 Alphatitan, Inc"
+  }
+}

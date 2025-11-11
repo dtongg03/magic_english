@@ -1,0 +1,124 @@
+{
+  "name": "magic-english",
+  "productName": "Magic English",
+  "version": "1.0.0",
+  "description": "Magic English - AI-Powered Vocabulary Learning App",
+  "main": "electron/main.js",
+  "type": "module",
+  "scripts": {
+    "start": "electron .",
+    "dev": "cross-env NODE_ENV=development electronmon .",
+    "lint": "prettier --check \"**/*.{js,ts,json,css,html}\"",
+    "format": "prettier --write \"**/*.{js,ts,json,css,html}\"",
+    "convert-icon": "node convert-icon.js",
+    "prebuild": "npm run build:icons && npm run build:assets",
+    "build:icons": "node scripts/generate-icons.js",
+    "build:assets": "node scripts/create-installer-assets.js",
+    "build": "electron-builder",
+    "build:win": "electron-builder --win --x64",
+    "build:win32": "electron-builder --win --ia32",
+    "build:portable": "electron-builder --win portable",
+    "build:dir": "electron-builder --dir",
+    "postbuild": "node scripts/post-build.js"
+  },
+  "build": {
+    "appId": "com.alphatitan.magicenglish",
+    "productName": "Magic English",
+    "copyright": "Copyright © 2025 Alphatitan, Inc. All rights reserved.",
+    "artifactName": "${productName}-${version}-${os}-${arch}.${ext}",
+    "directories": {
+      "buildResources": "build-resources",
+      "output": "build-output"
+    },
+    "files": [
+      "electron/**/*",
+      "src/**/*",
+      "static/**/*",
+      "data/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64", "ia32"]
+        },
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "build-resources/icon.ico",
+      "publisherName": "Alphatitan, Inc",
+      "verifyUpdateCodeSignature": false,
+      "sign": null,
+      "signAndEditExecutable": false,
+      "requestedExecutionLevel": "asInvoker",
+      "fileAssociations": [
+        {
+          "ext": "medb",
+          "name": "Magic English Database",
+          "description": "Magic English Database File",
+          "role": "Editor"
+        },
+        {
+          "ext": "vocab",
+          "name": "Magic English Vocabulary",
+          "description": "Magic English Vocabulary Export File",
+          "role": "Editor"
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "runAfterFinish": true,
+      "installerIcon": "build-resources/icon.ico",
+      "uninstallerIcon": "build-resources/icon.ico",
+      "installerHeaderIcon": "build-resources/icon.ico",
+      "createDesktopShortcut": "always",
+      "createStartMenuShortcut": true,
+      "shortcutName": "Magic English",
+      "menuCategory": "Education",
+      "deleteAppDataOnUninstall": false,
+      "displayLanguageSelector": false,
+      "installerLanguages": ["en_US"],
+      "language": "2052",
+      "license": "LICENSE.txt",
+      "warningsAsErrors": false,
+      "include": "installer.nsh",
+      "installerHeader": "build-resources/installerHeader.png",
+      "installerSidebar": "build-resources/installerSidebar.png",
+      "uninstallerSidebar": "build-resources/installerSidebar.png",
+      "artifactName": "${productName}-Setup-${version}.${ext}",
+      "packElevateHelper": true,
+      "differentialPackage": true
+    },
+    "portable": {
+      "artifactName": "${productName}-${version}-Portable.${ext}"
+    }
+  },
+  "dependencies": {
+    "electron-store": "^8.1.0",
+    "sharp": "^0.34.5"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "electron": "^31.3.0",
+    "electron-builder": "^24.13.3",
+    "electronmon": "^2.0.2",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^3.3.2"
+  },
+  "keywords": [
+    "electron",
+    "vocabulary",
+    "ai",
+    "education",
+    "english learning"
+  ],
+  "author": "dtongg03",
+  "license": "MIT"
+}

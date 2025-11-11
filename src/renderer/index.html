@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Magic English</title>
+    <link
+      rel="preconnect"
+      href="https://fonts.googleapis.com"
+    />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div class="title-bar">
+        <nav class="tab-bar">
+          <div class="tab-list">
+            <button class="tab active" data-tab="vocab">
+              <span class="tab-icon">+</span>
+              <span class="tab-label">Magic Vocab</span>
+            </button>
+            <button class="tab" data-tab="scoring">
+              <span class="tab-icon">+</span>
+              <span class="tab-label">Rate Sentence</span>
+            </button>
+            <button class="tab" data-tab="profile">
+              <span class="tab-icon">+</span>
+              <span class="tab-label">Stats & Streaks</span>
+            </button>
+          </div>
+        </nav>
+        <div class="title-bar-actions">
+          <button id="magic-search-btn" class="title-bar-btn" title="Magic Search (Ctrl+K)">
+            🔍
+          </button>
+          <button id="settings-btn" class="title-bar-btn" title="Cài đặt">
+            ⚙️
+          </button>
+          <button id="window-minimize" class="title-bar-btn window-control" title="Thu nhỏ">
+            <span class="window-control-icon window-control-minimize"></span>
+          </button>
+          <button id="window-maximize" class="title-bar-btn window-control" title="Phóng to">
+            <span class="window-control-icon window-control-maximize"></span>
+          </button>
+          <button id="window-close" class="title-bar-btn window-control window-control-close" title="Đóng">
+            <span class="window-control-icon window-control-close-icon"></span>
+          </button>
+        </div>
+      </div>
+
+      <div class="tab-content active" data-tab="vocab">
+        <div class="app-content">
+        <aside class="left-pane">
+        <section class="card search-card">
+          <header class="card__header">
+            <h2 data-i18n="vocab.search.title">Tìm từ nhanh</h2>
+            <p class="card__subtitle" data-i18n="vocab.search.subtitle">AI sẽ tự lưu kết quả vào database đang chọn</p>
+          </header>
+          <div class="search-card__input">
+            <input
+              id="word-search-input"
+              type="text"
+              placeholder="Nhập từ vựng tiếng Anh..."
+              autocomplete="off"
+            />
+            <button id="word-search-btn" type="button" class="primary-btn icon-only" title="Search">🔍</button>
+          </div>
+        </section>
+
+        <section class="card ai-card">
+          <header class="card__header">
+            <h2 data-i18n="vocab.aiResult.title">Kết quả AI</h2>
+          </header>
+          <div id="ai-output" class="ai-output">
+            <p class="muted" data-i18n="vocab.aiResult.empty">Chưa có kết quả nào. Hãy tìm một từ để bắt đầu.</p>
+          </div>
+        </section>
+
+      </aside>
+
+      <section class="right-pane">
+        <section class="card db-card">
+          <header class="card__header db-card__header">
+            <div>
+              <h2 data-i18n="vocab.database.title">Quản lý Database</h2>
+              <p class="card__subtitle" data-i18n="vocab.database.subtitle">Chọn thư mục pin và quản lý các file từ vựng</p>
+            </div>
+            <div class="db-actions">
+              <select id="path-select" title="Chọn thư mục JSON"></select>
+              <button id="path-pin" type="button" class="ghost-btn icon-only" data-i18n-title="vocab.paths.pin" title="Pin thư mục mới">📌</button>
+              <button id="path-remove" type="button" class="ghost-btn icon-only" data-i18n-title="vocab.paths.remove" title="Bỏ pin thư mục">❌</button>
+              <button id="db-new" type="button" class="ghost-btn icon-only" data-i18n-title="vocab.database.new" title="Tạo DB mới">➕</button>
+              <button id="db-rename" type="button" class="ghost-btn icon-only" data-i18n-title="vocab.database.rename" title="Đổi tên DB">✏️</button>
+              <button id="db-delete" type="button" class="ghost-btn icon-only" data-i18n-title="vocab.database.delete" title="Xoá DB">🗑️</button>
+            </div>
+          </header>
+          <div class="db-select-wrapper">
+            <label for="db-select" class="db-select-label" data-i18n="vocab.database.selectFile">Chọn file từ vựng:</label>
+            <select id="db-list" class="db-select"></select>
+          </div>
+        </section>
+
+        <section class="card table-card">
+          <header class="card__header table-card__header">
+            <h2 id="word-table-title" data-i18n="vocab.words.title">Danh sách từ</h2>
+          </header>
+          <div class="table-wrapper">
+            <table id="word-table">
+              <thead>
+                <tr>
+                  <th data-i18n="vocab.words.columns.word">Từ</th>
+                  <th data-i18n="vocab.words.columns.ipa">IPA</th>
+                  <th data-i18n="vocab.words.columns.type">Loại từ</th>
+                  <th data-i18n="vocab.words.columns.cefr">CEFR</th>
+                  <th data-i18n="vocab.words.columns.definition">Định nghĩa</th>
+                  <th data-i18n="vocab.words.columns.example">Ví dụ</th>
+                  <th data-i18n="vocab.words.columns.notes">Ghi chú</th>
+                  <th data-i18n="vocab.words.columns.tags">Tags</th>
+                  <th data-i18n="vocab.words.columns.actions">Hành động</th>
+                </tr>
+              </thead>
+              <tbody id="word-table-body"></tbody>
+            </table>
+            <div id="table-empty" class="table-empty muted" data-i18n="vocab.words.empty">
+              Chưa có dữ liệu trong database này.
+            </div>
+          </div>
+        </section>
+      </section>
+        </div>
+      </div>
+
+      <div class="tab-content" data-tab="scoring">
+        <div class="scoring-container">
+          <section class="card scoring-input-card">
+            <header class="card__header">
+              <h2 data-i18n="scoring.input.title">Nhập câu để chấm điểm</h2>
+              <p class="card__subtitle" data-i18n="scoring.input.subtitle">AI sẽ phân tích ngữ pháp, từ vựng và đưa ra điểm số chi tiết</p>
+            </header>
+            <div class="scoring-input-area">
+              <div class="textarea-wrapper">
+                <textarea
+                  id="sentence-input"
+                  placeholder="Nhập câu tiếng Anh của bạn để được chấm điểm và phân tích..."
+                  rows="4"
+                ></textarea>
+                <div class="textarea-footer">
+                  <span class="char-counter">
+                    <span id="char-count">0</span> ký tự
+                  </span>
+                  <span class="kbd-hint">
+                    <kbd>Ctrl</kbd> + <kbd>Enter</kbd> to submit
+                  </span>
+                </div>
+              </div>
+              <button id="score-btn" type="button" class="primary-btn">
+                <span>Chấm điểm</span>
+              </button>
+            </div>
+          </section>
+
+          <section class="card scoring-result-card">
+            <header class="card__header">
+              <h2 data-i18n="scoring.result.title">Kết quả chấm điểm</h2>
+            </header>
+            <div id="scoring-output" class="scoring-output">
+              <p class="muted" data-i18n="scoring.result.empty">Chưa có kết quả. Hãy nhập câu và nhấn "Chấm điểm".</p>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <!-- Profile & Streaks Tab -->
+      <div class="tab-content" data-tab="profile">
+        <div class="profile-layout">
+          <!-- Stats Row -->
+          <div class="stats-row" role="group" aria-label="Summary statistics">
+            <div class="stat-card" title="Total words you've collected">
+              <div class="stat-icon">📚</div>
+              <div class="stat-content">
+                <div class="stat-value" id="total-words">0</div>
+                <div class="stat-label">Total Words</div>
+              </div>
+            </div>
+            <div class="stat-card" title="Current learning streak">
+              <div class="stat-icon">🔥</div>
+              <div class="stat-content">
+                <div class="stat-value" id="current-streak">0</div>
+                <div class="stat-label">Day Streak</div>
+              </div>
+            </div>
+            <div class="stat-card" title="Longest streak ever">
+              <div class="stat-icon">🏆</div>
+              <div class="stat-content">
+                <div class="stat-value" id="longest-streak">0</div>
+                <div class="stat-label">Best Streak</div>
+              </div>
+            </div>
+            <div class="stat-card" title="Achievements unlocked">
+              <div class="stat-icon">⭐</div>
+              <div class="stat-content">
+                <div class="stat-value" id="total-achievements">0</div>
+                <div class="stat-label">Achievements</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Goals -->
+          <section class="card goals-card" aria-labelledby="goals-title">
+            <header class="card__header">
+              <h2 id="goals-title">Learning Goals</h2>
+              <p class="card__subtitle">Daily & weekly word targets</p>
+            </header>
+            <div class="goals-flex">
+              <div class="goal-block">
+                <div class="goal-head">
+                  <span class="goal-name">Daily</span>
+                  <span class="goal-value"><span id="daily-progress">0</span>/<span id="daily-goal">5</span></span>
+                </div>
+                <div class="goal-bar">
+                  <div class="goal-fill" id="daily-progress-bar" style="width:0%"></div>
+                </div>
+              </div>
+              <div class="goal-block">
+                <div class="goal-head">
+                  <span class="goal-name">Weekly</span>
+                  <span class="goal-value"><span id="weekly-progress">0</span>/<span id="weekly-goal">30</span></span>
+                </div>
+                <div class="goal-bar">
+                  <div class="goal-fill" id="weekly-progress-bar" style="width:0%"></div>
+                </div>
+              </div>
+              <div class="goal-actions">
+                <button id="edit-goals-btn" class="ghost-btn small">Edit Goals</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- Achievements -->
+          <section class="card achievements-card" aria-labelledby="achievements-title">
+            <header class="card__header">
+              <h2 id="achievements-title">Achievements</h2>
+              <p class="card__subtitle">Milestones & badges</p>
+            </header>
+            <div id="achievements-grid" class="achievements-responsive" aria-live="polite"></div>
+          </section>
+
+          <!-- Charts Row -->
+          <div class="charts-row">
+            <section class="card level-card" aria-labelledby="level-chart-title">
+              <header class="card__header">
+                <h2 id="level-chart-title">CEFR Levels</h2>
+                <p class="card__subtitle">Difficulty distribution</p>
+              </header>
+              <div id="level-chart" class="chart-container"></div>
+            </section>
+            <section class="card type-card" aria-labelledby="type-chart-title">
+              <header class="card__header">
+                <h2 id="type-chart-title">Word Types</h2>
+                <p class="card__subtitle">Parts of speech</p>
+              </header>
+              <div id="type-chart" class="chart-container"></div>
+            </section>
+          </div>
+
+          <!-- Calendar -->
+          <section class="card calendar-card" aria-labelledby="calendar-title">
+            <header class="card__header card__header--collapsible">
+              <div class="header-content">
+                <h2 id="calendar-title">Activity Calendar</h2>
+                <p class="card__subtitle">Past 3 weeks</p>
+              </div>
+              <button id="toggle-calendar-btn" class="ghost-btn icon-only small" aria-label="Toggle calendar" title="Expand/Collapse">
+                <span class="toggle-icon">▼</span>
+              </button>
+            </header>
+            <div id="calendar-content" class="calendar-content">
+              <div id="activity-calendar" class="calendar-grid" aria-live="polite"></div>
+              <div class="freeze-actions">
+                <button id="use-freeze-btn" class="ghost-btn small">❄️ Use Freeze (<span id="freezes-available">2</span>)</button>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+      
+      <footer class="app-footer">
+        <div class="app-footer-content">
+          <img src="../../static/icon.png" alt="Magic English Logo" class="app-footer-logo" />
+          <span class="app-footer-name">Magic English</span>
+          <span class="app-footer-separator">•</span>
+          <span class="app-footer-copyright">© 2025 Alphatitan, Inc</span>
+        </div>
+      </footer>
+    </div>
+
+    <div id="toast-container" class="toast-container"></div>
+    
+    <dialog id="db-modal" class="modal">
+      <form method="dialog" class="modal__content">
+        <h3 class="modal__title" data-i18n="vocab.database.create.title">Tạo database mới</h3>
+        <p class="modal__subtitle" data-i18n="vocab.database.create.subtitle">Nhập tên file JSON (ví dụ: travel.json hoặc travel)</p>
+        <input id="db-modal-input" type="text" data-i18n-placeholder="vocab.database.create.placeholder" placeholder="Tên database" autofocus />
+        <div class="modal__actions">
+          <button value="cancel" class="ghost-btn" data-i18n="vocab.database.create.cancel">Huỷ</button>
+          <button id="db-modal-confirm" value="confirm" class="primary-btn" data-i18n="vocab.database.create.confirm">Tạo</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="confirm-modal" class="modal">
+      <form method="dialog" class="modal__content">
+        <h3 class="modal__title" id="confirm-modal-title"></h3>
+        <p class="modal__subtitle" id="confirm-modal-message"></p>
+        <div class="modal__actions">
+          <button value="cancel" class="ghost-btn" data-i18n="modals.cancel">Huỷ</button>
+          <button value="confirm" class="primary-btn" id="confirm-modal-confirm" data-i18n="modals.confirm">Xác nhận</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="prompt-modal" class="modal">
+      <form method="dialog" class="modal__content">
+        <h3 class="modal__title" id="prompt-modal-title"></h3>
+        <p class="modal__subtitle" id="prompt-modal-message"></p>
+        <input id="prompt-modal-input" type="text" placeholder="" autofocus />
+        <div class="modal__actions">
+          <button value="cancel" class="ghost-btn" data-i18n="modals.cancel">Huỷ</button>
+          <button value="confirm" class="primary-btn" id="prompt-modal-confirm" data-i18n="modals.confirm">Xác nhận</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="goals-modal" class="modal">
+      <form method="dialog" class="modal__content">
+        <h3 class="modal__title">Edit Learning Goals</h3>
+        <p class="modal__subtitle">Set your daily and weekly word targets</p>
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <div>
+            <label for="goals-daily-input" style="display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: 6px;">Daily Goal (words/day)</label>
+            <input id="goals-daily-input" type="number" min="1" placeholder="5" style="width: 100%;" />
+          </div>
+          <div>
+            <label for="goals-weekly-input" style="display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: 6px;">Weekly Goal (words/week)</label>
+            <input id="goals-weekly-input" type="number" min="1" placeholder="30" style="width: 100%;" />
+          </div>
+        </div>
+        <div class="modal__actions">
+          <button type="button" value="cancel" class="ghost-btn">Cancel</button>
+          <button type="button" value="confirm" class="primary-btn" id="goals-modal-confirm">Save Goals</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="settings-modal" class="modal settings-modal">
+      <form method="dialog" class="modal__content">
+        <h3 class="modal__title" data-i18n="settings.title">Cài đặt</h3>
+        
+        <div class="settings-sections">
+          <section class="settings-section">
+            <label class="settings-label">
+              <span class="settings-label-text" data-i18n="settings.theme.title">Giao diện</span>
+              <select id="theme-select" class="settings-select">
+                <option value="system" selected>🖥️ Theo hệ thống</option>
+                <option value="light" data-i18n="settings.theme.light">☀️ Sáng</option>
+                <option value="dark" data-i18n="settings.theme.dark">🌙 Tối</option>
+              </select>
+            </label>
+          </section>
+
+          <section class="settings-section">
+            <label class="settings-label">
+              <span class="settings-label-text" data-i18n="settings.language.title">Ngôn ngữ</span>
+              <select id="language-select" class="settings-select">
+                <option value="en" data-i18n="settings.language.english">🇬🇧 English</option>
+                <option value="vi" data-i18n="settings.language.vietnamese">🇻🇳 Tiếng Việt</option>
+              </select>
+            </label>
+          </section>
+
+          <!-- AI Provider Settings -->
+          <section class="settings-section ai-settings-section">
+            <div class="settings-section-header">
+              <img src="../../static/ollama-logo.svg" alt="Ollama" class="ai-provider-logo" />
+              <h4 class="settings-section-title">Ollama Cloud API Configuration</h4>
+            </div>
+            
+            <p class="settings-description">Configure your Ollama Cloud API key to enable AI features. Get your free API key at <a href="https://ollama.com" target="_blank">ollama.com</a></p>
+
+            <!-- Ollama Cloud Settings -->
+            <div id="ollama-cloud-settings" class="provider-settings">
+              <label class="settings-label">
+                <span class="settings-label-text">API Key</span>
+                <input id="ollama-cloud-api-key" type="password" class="settings-input" placeholder="Enter your Ollama Cloud API key" />
+                <button type="button" id="toggle-ollama-api-key" class="toggle-password-btn" title="Show/Hide">👁️</button>
+              </label>
+              
+              <label class="settings-label">
+                <span class="settings-label-text">Model</span>
+                <select id="ollama-cloud-model" class="settings-select">
+                  <option value="qwen3-coder:480b-cloud">Qwen3 Coder 480B (Cloud)</option>
+                  <option value="gpt-oss:120b-cloud">GPT OSS 120B (Cloud)</option>
+                  <option value="gpt-oss:20b-cloud" selected>GPT OSS 20B (Cloud) - Recommended</option>
+                  <option value="deepseek-v3.1:671b-cloud">DeepSeek v3.1 671B (Cloud)</option>
+                </select>
+              </label>
+              
+              <button type="button" id="test-ollama-cloud" class="secondary-btn test-connection-btn">
+                <span class="btn-icon">🔌</span>
+                <span>Test Connection</span>
+              </button>
+            </div>
+          </section>
+        </div>
+
+        <div class="modal__actions">
+          <button value="cancel" class="ghost-btn" data-i18n="settings.close">Đóng</button>
+          <button type="button" id="save-ai-settings" class="primary-btn">Save Settings</button>
+        </div>
+        
+        <!-- Toast container inside modal for top-layer visibility -->
+        <div class="modal-toast-container"></div>
+      </form>
+    </dialog>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
+

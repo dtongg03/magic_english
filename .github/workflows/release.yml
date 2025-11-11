@@ -1,0 +1,116 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'  # Triggers on tags like v1.0.0, v1.2.3, etc.
+  workflow_dispatch:  # Allows manual trigger from GitHub Actions tab
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Install required system packages
+        run: |
+          # Install ImageMagick for icon generation
+          choco install imagemagick -y
+        shell: powershell
+      
+      - name: Build application
+        run: npm run build:win
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-installer
+          path: |
+            build-output/*.exe
+            build-output/*.sha256
+          retention-days: 30
+      
+      - name: Create Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            build-output/*.exe
+            build-output/*.sha256
+          draft: true
+          generate_release_notes: true
+          body: |
+            ## 🎉 Magic English ${{ github.ref_name }}
+            
+            ### 📦 Downloads
+            - **Windows Installer**: `Magic English-*-win-x64.exe`
+            
+            ### 📝 Installation
+            1. Download the installer
+            2. Run the `.exe` file
+            3. Follow the installation wizard
+            
+            ### 🔐 Verification
+            SHA256 checksums are provided for security verification.
+            
+            ---
+            
+            Built with ❤️ using Electron
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-portable:
+    runs-on: windows-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Install ImageMagick
+        run: choco install imagemagick -y
+        shell: powershell
+      
+      - name: Build portable version
+        run: npm run build:portable
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Upload portable artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-portable
+          path: |
+            build-output/*.exe
+          retention-days: 30
+      
+      - name: Add portable to release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: build-output/*-portable.exe
+          draft: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+

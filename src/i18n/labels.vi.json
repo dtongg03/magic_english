@@ -1,0 +1,186 @@
+{
+  "app": {
+    "name": "Magic English",
+    "title": "Magic English"
+  },
+  "tabs": {
+    "vocab": "Magic Vocab",
+    "scoring": "Chấm điểm câu"
+  },
+  "window": {
+    "settings": "Cài đặt",
+    "minimize": "Thu nhỏ",
+    "maximize": "Phóng to",
+    "close": "Đóng"
+  },
+  "vocab": {
+    "search": {
+      "title": "Tìm từ nhanh",
+      "subtitle": "AI sẽ tự lưu kết quả vào database đang chọn",
+      "placeholder": "Nhập từ vựng tiếng Anh...",
+      "button": "Search",
+      "analyzing": "Đang phân tích..."
+    },
+    "aiResult": {
+      "title": "Kết quả AI",
+      "empty": "Chưa có kết quả nào. Hãy tìm một từ để bắt đầu.",
+      "definition": "Định nghĩa",
+      "example": "Ví dụ",
+      "ipa": "IPA",
+      "notes": "Ghi chú",
+      "tags": "Tags"
+    },
+    "database": {
+      "title": "Quản lý Database",
+      "subtitle": "Chọn thư mục pin và quản lý các file từ vựng",
+      "select": "Chọn Database",
+      "selectFile": "Chọn file từ vựng:",
+      "new": "Tạo DB mới",
+      "rename": "Đổi tên DB",
+      "delete": "Xoá DB",
+      "create": {
+        "title": "Tạo database mới",
+        "subtitle": "Nhập tên file JSON (ví dụ: travel.json hoặc travel)",
+        "placeholder": "Tên database",
+        "cancel": "Huỷ",
+        "confirm": "Tạo"
+      },
+      "empty": "Chưa có database nào. Tạo một cái để bắt đầu."
+    },
+    "words": {
+      "title": "Danh sách từ",
+      "empty": "Chưa có dữ liệu trong database này.",
+      "columns": {
+        "word": "Từ",
+        "ipa": "IPA",
+        "type": "Loại từ",
+        "cefr": "CEFR",
+        "definition": "Định nghĩa",
+        "example": "Ví dụ",
+        "notes": "Ghi chú",
+        "tags": "Tags",
+        "actions": "Hành động"
+      },
+      "actions": {
+        "view": "Xem",
+        "delete": "Xoá"
+      }
+    },
+    "paths": {
+      "select": "Chọn thư mục",
+      "pin": "Pin thư mục mới",
+      "remove": "Bỏ pin thư mục",
+      "empty": "Chưa có thư mục nào được pin"
+    }
+  },
+  "scoring": {
+    "input": {
+      "title": "Nhập câu để chấm điểm",
+      "subtitle": "AI sẽ phân tích ngữ pháp, từ vựng và đưa ra điểm số chi tiết",
+      "placeholder": "Nhập câu tiếng Anh của bạn để được chấm điểm và phân tích...",
+      "button": "Chấm điểm",
+      "analyzing": "Đang phân tích..."
+    },
+    "result": {
+      "title": "Kết quả chấm điểm",
+      "empty": "Chưa có kết quả. Hãy nhập câu và nhấn \"Chấm điểm\".",
+      "noFeedback": "Không có đánh giá tổng quan.",
+      "yourSentence": "Câu của bạn:",
+      "errors": {
+        "title": "Lỗi phát hiện",
+        "count": "lỗi",
+        "fixTo": "Sửa thành:",
+        "suggestion": "Gợi ý"
+      },
+      "strengths": {
+        "title": "Điểm mạnh:"
+      },
+      "improvements": {
+        "title": "Gợi ý cải thiện:"
+      },
+      "grammar": {
+        "title": "Phân tích ngữ pháp:",
+        "tense": "Thì:",
+        "subjectVerb": "Chủ ngữ - Động từ:",
+        "wordOrder": "Trật tự từ:",
+        "articles": "Mạo từ:"
+      },
+      "vocabulary": {
+        "title": "Phân tích từ vựng:",
+        "level": "Mức độ:",
+        "appropriateness": "Phù hợp:",
+        "suggestions": "Gợi ý từ vựng tốt hơn:"
+      }
+    }
+  },
+  "settings": {
+    "title": "Cài đặt",
+    "close": "Đóng",
+    "theme": {
+      "title": "Giao diện",
+      "light": "☀️ Sáng",
+      "dark": "🌙 Tối"
+    },
+    "language": {
+      "title": "Ngôn ngữ",
+      "english": "🇬🇧 English",
+      "vietnamese": "🇻🇳 Tiếng Việt"
+    }
+  },
+  "modals": {
+    "cancel": "Huỷ",
+    "confirm": "Xác nhận",
+    "delete": {
+      "title": "Xoá Database",
+      "message": "Xoá database \"{name}\"? Hành động này không thể hoàn tác.",
+      "confirm": "Xoá"
+    },
+    "rename": {
+      "title": "Đổi tên Database",
+      "message": "Đổi tên",
+      "placeholder": "Tên database mới"
+    },
+    "unpinPath": {
+      "title": "Bỏ pin thư mục",
+      "message": "Bỏ pin thư mục \"{path}\"?",
+      "confirm": "Bỏ pin"
+    },
+    "deleteWord": {
+      "title": "Xoá từ vựng",
+      "message": "Xoá từ \"{word}\"?",
+      "confirm": "Xoá"
+    }
+  },
+  "toasts": {
+    "success": {
+      "created": "Đã tạo và chọn database",
+      "renamed": "Đã đổi tên database",
+      "deleted": "Đã xoá database",
+      "saved": "Đã lưu từ thành công",
+      "analyzed": "Phân tích hoàn tất!",
+      "unpinned": "Đã bỏ pin thư mục",
+      "wordDeleted": "Đã xoá \"{word}\"",
+      "dbSelected": "Đang dùng DB: {name}",
+      "themeChanged": "Đã chuyển theme",
+      "scoringComplete": "Phân tích hoàn tất!"
+    },
+    "error": {
+      "empty": "Hãy nhập giá trị",
+      "notFound": "Không tìm thấy database",
+      "noDatabase": "Chưa chọn database",
+      "cannotDelete": "Không thể xoá database cuối cùng. Hãy tạo một cái khác trước.",
+      "cannotUnpinDefault": "Không thể bỏ pin thư mục mặc định",
+      "failed": "Thao tác thất bại",
+      "analyzeFailed": "Không thể phân tích",
+      "emptySentence": "Hãy nhập câu trước.",
+      "scoringFailed": "Không thể chấm điểm. Vui lòng thử lại.",
+      "initFailed": "Ứng dụng không khởi tạo được."
+    },
+    "info": {
+      "noResults": "Không tìm thấy kết quả"
+    }
+  },
+  "footer": {
+    "copyright": "© 2025 Alphatitan, Inc"
+  }
+}
