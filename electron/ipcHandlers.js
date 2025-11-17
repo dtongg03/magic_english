@@ -622,6 +622,7 @@ export async function registerIpcHandlers(window) {
       const provider = preferencesStore.get('aiProvider') || 'ollama-cloud';
       const ollamaCloudApiKey = preferencesStore.get('ollamaCloudApiKey') || '';
       const ollamaCloudModel = preferencesStore.get('ollamaCloudModel') || 'gpt-oss:20b-cloud';
+      const openaiEndpoint = preferencesStore.get('openaiEndpoint') || 'https://api.openai.com';
       const openaiApiKey = preferencesStore.get('openaiApiKey') || '';
       const openaiModel = preferencesStore.get('openaiModel') || 'gpt-4o-mini';
       const ollamaLocalHost = preferencesStore.get('ollamaLocalHost') || 'http://localhost:11434';
@@ -634,6 +635,7 @@ export async function registerIpcHandlers(window) {
           model: ollamaCloudModel
         },
         openai: {
+          endpoint: openaiEndpoint,
           apiKey: openaiApiKey,
           model: openaiModel
         },
@@ -652,6 +654,7 @@ export async function registerIpcHandlers(window) {
           model: 'gpt-oss:20b-cloud'
         },
         openai: {
+          endpoint: 'https://api.openai.com',
           apiKey: '',
           model: 'gpt-4o-mini'
         },
@@ -678,6 +681,9 @@ export async function registerIpcHandlers(window) {
         }
       }
       if (config.openai) {
+        if (config.openai.endpoint) {
+          preferencesStore.set('openaiEndpoint', config.openai.endpoint);
+        }
         if (config.openai.apiKey !== undefined) {
           preferencesStore.set('openaiApiKey', config.openai.apiKey);
         }

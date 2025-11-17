@@ -37,6 +37,10 @@ const schema = {
     enum: ['qwen3-coder:480b-cloud', 'gpt-oss:120b-cloud', 'gpt-oss:20b-cloud', 'deepseek-v3.1:671b-cloud'],
     default: 'gpt-oss:20b-cloud'
   },
+  openaiEndpoint: {
+    type: 'string',
+    default: 'https://api.openai.com'
+  },
   openaiApiKey: {
     type: 'string',
     default: ''

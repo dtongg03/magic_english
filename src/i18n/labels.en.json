@@ -125,6 +125,50 @@
       "title": "Language",
       "english": "🇬🇧 English",
       "vietnamese": "🇻🇳 Vietnamese"
+    },
+    "ai": {
+      "title": "AI Provider Configuration",
+      "description": "Choose your AI provider and configure the connection settings.",
+      "provider": "AI Provider",
+      "save": "Save Settings",
+      "testConnection": "Test Connection",
+      "showHide": "Show/Hide",
+      "providers": {
+        "ollamaCloud": "☁️ Ollama Cloud",
+        "ollamaLocal": "🏠 Ollama Local",
+        "openai": "🤖 OpenAI"
+      },
+      "ollamaCloud": {
+        "title": "Ollama Cloud",
+        "description": "Get your free API key at <a href=\"https://ollama.com\" target=\"_blank\">ollama.com</a>",
+        "apiKey": "API Key",
+        "apiKeyPlaceholder": "Enter your Ollama Cloud API key",
+        "model": "Model",
+        "models": {
+          "qwen3": "Qwen3 Coder 480B (Cloud)",
+          "gptOss120": "GPT OSS 120B (Cloud)",
+          "gptOss20": "GPT OSS 20B (Cloud) - Recommended",
+          "deepseek": "DeepSeek v3.1 671B (Cloud)"
+        }
+      },
+      "ollamaLocal": {
+        "title": "Ollama Local",
+        "description": "Connect to your local Ollama server. <a href=\"https://ollama.com\" target=\"_blank\">Install Ollama</a> to get started.",
+        "serverUrl": "Server URL",
+        "serverUrlPlaceholder": "http://localhost:11434",
+        "model": "Model",
+        "modelPlaceholder": "llama3.2:latest"
+      },
+      "openai": {
+        "title": "OpenAI / OpenAI-Compatible",
+        "description": "Use OpenAI API or compatible local servers (vLLM, LocalAI, etc.). Get official API key from <a href=\"https://platform.openai.com/api-keys\" target=\"_blank\">OpenAI Platform</a>",
+        "apiEndpoint": "API Endpoint",
+        "apiEndpointPlaceholder": "https://api.openai.com",
+        "apiKey": "API Key",
+        "apiKeyPlaceholder": "Enter your API key (or any value for local servers)",
+        "model": "Model",
+        "modelPlaceholder": "gpt-4o-mini"
+      }
     }
   },
   "modals": {
@@ -162,7 +206,10 @@
       "wordDeleted": "Deleted \"{word}\"",
       "dbSelected": "Using DB: {name}",
       "themeChanged": "Theme changed",
-      "scoringComplete": "Analysis complete!"
+      "scoringComplete": "Analysis complete!",
+      "connectionSuccess": "Connection successful!",
+      "modelsAvailable": "{count} models available",
+      "settingsSaved": "Settings saved successfully!"
     },
     "error": {
       "empty": "Please enter a value",
@@ -174,10 +221,16 @@
       "analyzeFailed": "Could not analyze",
       "emptySentence": "Please enter a sentence first.",
       "scoringFailed": "Could not score. Please try again.",
-      "initFailed": "Application could not initialize."
+      "initFailed": "Application could not initialize.",
+      "apiKeyRequired": "Please enter an API key",
+      "unknownProvider": "Unknown provider",
+      "connectionFailed": "Connection failed",
+      "saveFailed": "Failed to save settings"
     },
     "info": {
-      "noResults": "No results found"
+      "noResults": "No results found",
+      "testingConnection": "Testing connection...",
+      "savingSettings": "Saving settings..."
     }
   },
   "footer": {

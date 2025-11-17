@@ -65,36 +65,125 @@ export class AiClient {
     // Get from preferences
     if (this.#preferencesStore) {
       try {
-        const apiKey = this.#preferencesStore.get('ollamaCloudApiKey', '');
-        const model = this.#preferencesStore.get('ollamaCloudModel', 'gpt-oss:20b-cloud');
+        const provider = this.#preferencesStore.get('aiProvider', 'ollama-cloud');
         
-        return {
-          host: 'https://ollama.com',
-          apiKey: apiKey || '', // Empty if not configured
-          model: model || 'gpt-oss:20b-cloud'
-        };
+        switch (provider) {
+          case 'ollama-cloud': {
+            const apiKey = this.#preferencesStore.get('ollamaCloudApiKey', '');
+            const model = this.#preferencesStore.get('ollamaCloudModel', 'gpt-oss:20b-cloud');
+            
+            return {
+              provider: 'ollama-cloud',
+              host: 'https://ollama.com',
+              apiKey: apiKey || '',
+              model: model || 'gpt-oss:20b-cloud'
+            };
+          }
+          
+          case 'ollama-local': {
+            const host = this.#preferencesStore.get('ollamaLocalHost', 'http://localhost:11434');
+            const model = this.#preferencesStore.get('ollamaLocalModel', 'llama3.2:latest');
+            
+            return {
+              provider: 'ollama-local',
+              host: host || 'http://localhost:11434',
+              apiKey: '', // Local Ollama doesn't need API key
+              model: model || 'llama3.2:latest'
+            };
+          }
+          
+          case 'openai': {
+            const endpoint = this.#preferencesStore.get('openaiEndpoint', 'https://api.openai.com');
+            const apiKey = this.#preferencesStore.get('openaiApiKey', '');
+            const model = this.#preferencesStore.get('openaiModel', 'gpt-4o-mini');
+            
+            return {
+              provider: 'openai',
+              host: endpoint || 'https://api.openai.com',
+              apiKey: apiKey || '',
+              model: model || 'gpt-4o-mini'
+            };
+          }
+          
+          default:
+            warn(`[AiClient] Unknown provider: ${provider}, falling back to ollama-cloud`);
+            return {
+              provider: 'ollama-cloud',
+              host: 'https://ollama.com',
+              apiKey: this.#preferencesStore.get('ollamaCloudApiKey', ''),
+              model: this.#preferencesStore.get('ollamaCloudModel', 'gpt-oss:20b-cloud')
+            };
+        }
       } catch (error) {
         warn('[AiClient] Error reading preferences:', error);
       }
     }
     
-    // No preferences store - return empty config
+    // No preferences store - return default config
     warn('[AiClient] No preferences store available');
     return {
+      provider: 'ollama-cloud',
       host: 'https://ollama.com',
       apiKey: '',
       model: 'gpt-oss:20b-cloud'
     };
   }
 
+  #getEndpoint(config) {
+    switch (config.provider) {
+      case 'openai':
+        return new URL('/v1/chat/completions', config.host).toString();
+      case 'ollama-local':
+      case 'ollama-cloud':
+      default:
+        return new URL('/api/chat', config.host).toString();
+    }
+  }
+
+  #buildRequestBody(config, messages, options = {}) {
+    const baseBody = {
+      model: config.model,
+      messages,
+      stream: options.stream || false,
+      temperature: options.temperature || 0.3
+    };
+
+    if (options.maxTokens) {
+      if (config.provider === 'openai') {
+        baseBody.max_tokens = options.maxTokens;
+      } else {
+        baseBody.max_tokens = options.maxTokens;
+      }
+    }
+
+    if (options.responseFormat) {
+      baseBody.response_format = options.responseFormat;
+    }
+
+    return baseBody;
+  }
+
+  #buildHeaders(config) {
+    const headers = {
+      'Content-Type': 'application/json'
+    };
+
+    if (config.apiKey) {
+      headers.Authorization = `Bearer ${config.apiKey}`;
+    }
+
+    return headers;
+  }
+
   async analyzeWord(word) {
     const config = await this.#getApiConfig();
     
-    if (!config.apiKey) {
-      throw new Error('Missing API key. Please configure your Ollama Cloud API key in Settings.');
+    if (config.provider !== 'ollama-local' && !config.apiKey) {
+      const providerName = config.provider === 'openai' ? 'OpenAI' : 'Ollama Cloud';
+      throw new Error(`Missing API key. Please configure your ${providerName} API key in Settings.`);
     }
     
-    const endpoint = new URL('/api/chat', config.host).toString();
+    const endpoint = this.#getEndpoint(config);
     const messages = [{ role: 'user', content: buildPrompt(word) }];
 
     // Add timeout and abort controller for faster failure
@@ -104,18 +193,13 @@ export class AiClient {
     try {
       const res = await fetch(endpoint, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${config.apiKey}`
-        },
-        body: JSON.stringify({
-          model: config.model,
-          messages,
+        headers: this.#buildHeaders(config),
+        body: JSON.stringify(this.#buildRequestBody(config, messages, {
           stream: false,
-          temperature: 0.3, // Lower temperature for faster, more consistent responses
-          max_tokens: 500, // Limit response length for speed
-          response_format: { type: 'json_object' } // Force JSON output if supported
-        }),
+          temperature: 0.3,
+          maxTokens: 500,
+          responseFormat: { type: 'json_object' }
+        })),
         signal: controller.signal
       });
       
@@ -168,11 +252,12 @@ export class AiClient {
   async analyzeSentence(sentence, options = {}) {
     const config = await this.#getApiConfig();
     
-    if (!config.apiKey) {
-      throw new Error('Missing API key. Please configure your Ollama Cloud API key in Settings.');
+    if (config.provider !== 'ollama-local' && !config.apiKey) {
+      const providerName = config.provider === 'openai' ? 'OpenAI' : 'Ollama Cloud';
+      throw new Error(`Missing API key. Please configure your ${providerName} API key in Settings.`);
     }
 
-    const endpoint = new URL('/api/chat', config.host).toString();
+    const endpoint = this.#getEndpoint(config);
     const messages = [{ role: 'user', content: buildSentenceAnalysisPrompt(sentence) }];
     const useStreaming = options.stream !== false;
 
@@ -193,18 +278,13 @@ export class AiClient {
     try {
       const res = await fetch(endpoint, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${config.apiKey}`
-        },
-        body: JSON.stringify({
-          model: config.model,
-          messages,
+        headers: this.#buildHeaders(config),
+        body: JSON.stringify(this.#buildRequestBody(config, messages, {
           stream: false,
-          temperature: 0.3, // Lower temperature for faster, more focused responses
-          max_tokens: 2000, // Limit response length for speed
-          response_format: { type: 'json_object' } // Force JSON output if supported
-        }),
+          temperature: 0.3,
+          maxTokens: 2000,
+          responseFormat: { type: 'json_object' }
+        })),
         signal: controller.signal
       });
       
@@ -262,18 +342,13 @@ export class AiClient {
   async #analyzeSentenceStreaming(endpoint, config, messages, onChunk) {
     const res = await fetch(endpoint, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${config.apiKey}`
-      },
-      body: JSON.stringify({
-        model: config.model,
-        messages,
+      headers: this.#buildHeaders(config),
+      body: JSON.stringify(this.#buildRequestBody(config, messages, {
         stream: true,
-        temperature: 0.3, // Lower temperature for faster responses
-        max_tokens: 2000, // Limit response length
-        response_format: { type: 'json_object' } // Force JSON if supported
-      })
+        temperature: 0.3,
+        maxTokens: 2000,
+        responseFormat: { type: 'json_object' }
+      }))
     });
 
     if (!res.ok) {
@@ -335,12 +410,13 @@ export class AiClient {
   async chat(message, options = {}) {
     const config = await this.#getApiConfig();
     
-    if (!config.apiKey) {
-      throw new Error('Missing API key. Please configure your Ollama Cloud API key in Settings.');
+    if (config.provider !== 'ollama-local' && !config.apiKey) {
+      const providerName = config.provider === 'openai' ? 'OpenAI' : 'Ollama Cloud';
+      throw new Error(`Missing API key. Please configure your ${providerName} API key in Settings.`);
     }
 
     const { stream = false, onChunk = null } = options;
-    const endpoint = new URL('/api/chat', config.host).toString();
+    const endpoint = this.#getEndpoint(config);
     const messages = [
       {
         role: 'system',
@@ -354,15 +430,10 @@ export class AiClient {
 
     const res = await fetch(endpoint, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${config.apiKey}`
-      },
-      body: JSON.stringify({
-        model: config.model,
-        messages,
+      headers: this.#buildHeaders(config),
+      body: JSON.stringify(this.#buildRequestBody(config, messages, {
         stream
-      })
+      }))
     });
 
     if (!res.ok) {

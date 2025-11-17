@@ -51,11 +51,23 @@ const els = {
   settingsModal: document.getElementById('settings-modal'),
   themeSelect: document.getElementById('theme-select'),
   languageSelect: document.getElementById('language-select'),
-  // AI Settings elements - Ollama Cloud only
+  // AI Settings elements
+  aiProviderSelect: document.getElementById('ai-provider-select'),
+  ollamaCloudSettings: document.getElementById('ollama-cloud-settings'),
+  ollamaLocalSettings: document.getElementById('ollama-local-settings'),
+  openaiSettings: document.getElementById('openai-settings'),
   ollamaCloudApiKey: document.getElementById('ollama-cloud-api-key'),
   ollamaCloudModel: document.getElementById('ollama-cloud-model'),
   testOllamaCloud: document.getElementById('test-ollama-cloud'),
   toggleOllamaApiKey: document.getElementById('toggle-ollama-api-key'),
+  ollamaLocalHost: document.getElementById('ollama-local-host'),
+  ollamaLocalModel: document.getElementById('ollama-local-model'),
+  testOllamaLocal: document.getElementById('test-ollama-local'),
+  openaiEndpoint: document.getElementById('openai-endpoint'),
+  openaiApiKey: document.getElementById('openai-api-key'),
+  openaiModel: document.getElementById('openai-model'),
+  testOpenai: document.getElementById('test-openai'),
+  toggleOpenaiApiKey: document.getElementById('toggle-openai-api-key'),
   saveAiSettings: document.getElementById('save-ai-settings'),
   tabs: document.querySelectorAll('.tab'),
   tabContents: document.querySelectorAll('.tab-content'),
@@ -810,10 +822,6 @@ const updateTheme = (theme) => {
   }
 };
 
-const closeSettings = () => {
-  if (!els.settingsModal) return;
-  els.settingsModal.close();
-};
 
 const handleThemeSelect = async (theme) => {
   try {
@@ -1172,9 +1180,13 @@ const attachListeners = () => {
     handleLanguageSelect(e.target.value);
   });
 
-  // AI Settings - Ollama Cloud only
+  // AI Settings
+  els.aiProviderSelect?.addEventListener('change', handleProviderChange);
   els.toggleOllamaApiKey?.addEventListener('click', () => togglePasswordVisibility(els.ollamaCloudApiKey));
-  els.testOllamaCloud?.addEventListener('click', testConnection);
+  els.toggleOpenaiApiKey?.addEventListener('click', () => togglePasswordVisibility(els.openaiApiKey));
+  els.testOllamaCloud?.addEventListener('click', () => testConnection('ollama-cloud'));
+  els.testOllamaLocal?.addEventListener('click', () => testConnection('ollama-local'));
+  els.testOpenai?.addEventListener('click', () => testConnection('openai'));
   els.saveAiSettings?.addEventListener('click', saveAiSettings);
   
   // Tab switching
@@ -1299,11 +1311,16 @@ const updateUIWithLabels = () => {
     if (key) {
       const text = t(key);
       if (text && text !== key) {
-        el.textContent = text;
+        // Use innerHTML for elements that may contain HTML (like links)
+        if (el.classList.contains('provider-description') || el.classList.contains('settings-description')) {
+          el.innerHTML = text;
+        } else {
+          el.textContent = text;
+        }
       }
     }
   });
-  
+
   // Update elements with data-i18n-title attribute
   document.querySelectorAll('[data-i18n-title]').forEach((el) => {
     const key = el.getAttribute('data-i18n-title');
@@ -1314,7 +1331,7 @@ const updateUIWithLabels = () => {
       }
     }
   });
-  
+
   // Update elements with data-i18n-placeholder attribute
   document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => {
     const key = el.getAttribute('data-i18n-placeholder');
@@ -1325,38 +1342,38 @@ const updateUIWithLabels = () => {
       }
     }
   });
-  
+
   // Update specific placeholders
   const searchInput = document.getElementById('word-search-input');
   if (searchInput) searchInput.placeholder = t('vocab.search.placeholder');
-  
+
   const sentenceInput = document.getElementById('sentence-input');
   if (sentenceInput) sentenceInput.placeholder = t('scoring.input.placeholder');
-  
+
   // Update button texts
   const searchBtn = document.getElementById('word-search-btn');
   if (searchBtn) searchBtn.textContent = t('vocab.search.button');
-  
+
   const scoreBtn = document.getElementById('score-btn');
   if (scoreBtn) scoreBtn.textContent = t('scoring.input.button');
-  
+
   // Update tab labels
   const vocabTab = document.querySelector('[data-tab="vocab"] .tab-label');
   if (vocabTab) vocabTab.textContent = t('tabs.vocab');
-  
+
   const scoringTab = document.querySelector('[data-tab="scoring"] .tab-label');
   if (scoringTab) scoringTab.textContent = t('tabs.scoring');
-  
+
   // Update window control titles
   const settingsBtn = document.getElementById('settings-btn');
   if (settingsBtn) settingsBtn.title = t('window.settings');
-  
+
   const minimizeBtn = document.getElementById('window-minimize');
   if (minimizeBtn) minimizeBtn.title = t('window.minimize');
-  
+
   const maximizeBtn = document.getElementById('window-maximize');
   if (maximizeBtn) maximizeBtn.title = t('window.maximize');
-  
+
   const closeBtn = document.getElementById('window-close');
   if (closeBtn) closeBtn.title = t('window.close');
 };
@@ -1423,47 +1440,108 @@ const initTheme = async () => {
   }
 };
 
-// AI Settings Functions - Ollama Cloud only
+// AI Settings Functions
+const handleProviderChange = (event) => {
+  const provider = event.target.value;
+  showProviderSettings(provider);
+};
+
+const showProviderSettings = (provider) => {
+  // Hide all provider settings
+  if (els.ollamaCloudSettings) els.ollamaCloudSettings.style.display = 'none';
+  if (els.ollamaLocalSettings) els.ollamaLocalSettings.style.display = 'none';
+  if (els.openaiSettings) els.openaiSettings.style.display = 'none';
+  
+  // Show selected provider settings
+  switch (provider) {
+    case 'ollama-cloud':
+      if (els.ollamaCloudSettings) els.ollamaCloudSettings.style.display = 'block';
+      break;
+    case 'ollama-local':
+      if (els.ollamaLocalSettings) els.ollamaLocalSettings.style.display = 'block';
+      break;
+    case 'openai':
+      if (els.openaiSettings) els.openaiSettings.style.display = 'block';
+      break;
+  }
+};
+
 const togglePasswordVisibility = (inputEl) => {
   if (!inputEl) return;
   inputEl.type = inputEl.type === 'password' ? 'text' : 'password';
 };
 
-const testConnection = async () => {
-  const apiKey = els.ollamaCloudApiKey?.value || '';
-  const model = els.ollamaCloudModel?.value || 'gpt-oss:20b-cloud';
-  
-  if (!apiKey) {
-    showToast('Please enter an API key', 'error');
-    return;
+const testConnection = async (provider) => {
+  let config = { provider };
+  let testButton;
+
+  switch (provider) {
+    case 'ollama-cloud': {
+      const apiKey = els.ollamaCloudApiKey?.value || '';
+      const model = els.ollamaCloudModel?.value || 'gpt-oss:20b-cloud';
+
+      if (!apiKey) {
+        showToast(t('toasts.error.apiKeyRequired'), 'error');
+        return;
+      }
+
+      config.ollamaCloud = { apiKey, model };
+      testButton = els.testOllamaCloud;
+      break;
+    }
+
+    case 'ollama-local': {
+      const host = els.ollamaLocalHost?.value || 'http://localhost:11434';
+      const model = els.ollamaLocalModel?.value || 'llama3.2:latest';
+
+      config.ollamaLocal = { host, model };
+      testButton = els.testOllamaLocal;
+      break;
+    }
+
+    case 'openai': {
+      const endpoint = els.openaiEndpoint?.value || 'https://api.openai.com';
+      const apiKey = els.openaiApiKey?.value || '';
+      const model = els.openaiModel?.value || 'gpt-4o-mini';
+
+      if (!apiKey) {
+        showToast(t('toasts.error.apiKeyRequired'), 'error');
+        return;
+      }
+
+      config.openai = { endpoint, apiKey, model };
+      testButton = els.testOpenai;
+      break;
+    }
+
+    default:
+      showToast(t('toasts.error.unknownProvider'), 'error');
+      return;
   }
-  
-  const loadingToast = showToast('Testing connection...', 'loading', 0);
-  els.testOllamaCloud.disabled = true;
-  
+
+  const loadingToast = showToast(t('toasts.info.testingConnection'), 'loading', 0);
+  if (testButton) testButton.disabled = true;
+
   try {
-    const result = await window.api.invoke('settings:test-connection', {
-      provider: 'ollama-cloud',
-      ollamaCloud: { apiKey, model }
-    });
-    
+    const result = await window.api.invoke('settings:test-connection', config);
+
     hideToast(loadingToast);
-    
+
     if (result.success) {
-      let message = result.message || 'Connection successful!';
+      let message = result.message || t('toasts.success.connectionSuccess');
       if (result.models && result.models.length > 0) {
-        message += ` (${result.models.length} models available)`;
+        message += ` (${t('toasts.success.modelsAvailable', { count: result.models.length })})`;
       }
       showToast(message, 'success');
     } else {
-      showToast(result.message || 'Connection failed', 'error');
+      showToast(result.message || t('toasts.error.connectionFailed'), 'error');
     }
   } catch (error) {
     console.error('[AI Settings] Test connection error:', error);
     hideToast(loadingToast);
-    showToast(error.message || 'Connection failed', 'error');
+    showToast(error.message || t('toasts.error.connectionFailed'), 'error');
   } finally {
-    els.testOllamaCloud.disabled = false;
+    if (testButton) testButton.disabled = false;
   }
 };
 
@@ -1471,9 +1549,29 @@ const loadAiSettings = async () => {
   try {
     const config = await window.api.invoke('settings:get-ai-config');
     
+    // Set provider selection
+    if (els.aiProviderSelect && config.provider) {
+      els.aiProviderSelect.value = config.provider;
+      showProviderSettings(config.provider);
+    }
+    
+    // Load Ollama Cloud settings
     if (config.ollamaCloud) {
       if (els.ollamaCloudApiKey) els.ollamaCloudApiKey.value = config.ollamaCloud.apiKey || '';
       if (els.ollamaCloudModel) els.ollamaCloudModel.value = config.ollamaCloud.model || 'gpt-oss:20b-cloud';
+    }
+    
+    // Load Ollama Local settings
+    if (config.ollamaLocal) {
+      if (els.ollamaLocalHost) els.ollamaLocalHost.value = config.ollamaLocal.host || 'http://localhost:11434';
+      if (els.ollamaLocalModel) els.ollamaLocalModel.value = config.ollamaLocal.model || 'llama3.2:latest';
+    }
+    
+    // Load OpenAI settings
+    if (config.openai) {
+      if (els.openaiEndpoint) els.openaiEndpoint.value = config.openai.endpoint || 'https://api.openai.com';
+      if (els.openaiApiKey) els.openaiApiKey.value = config.openai.apiKey || '';
+      if (els.openaiModel) els.openaiModel.value = config.openai.model || 'gpt-4o-mini';
     }
   } catch (error) {
     console.error('[AI Settings] Load error:', error);
@@ -1481,27 +1579,39 @@ const loadAiSettings = async () => {
 };
 
 const saveAiSettings = async () => {
-  const loadingToast = showToast('Saving settings...', 'loading', 0);
-  
+  const loadingToast = showToast(t('toasts.info.savingSettings'), 'loading', 0);
+
   try {
-    const config = {
-      provider: 'ollama-cloud',
-      ollamaCloud: {
+    const provider = els.aiProviderSelect?.value || 'ollama-cloud';
+    const config = { provider };
+
+    // Add provider-specific settings
+    if (provider === 'ollama-cloud') {
+      config.ollamaCloud = {
         apiKey: els.ollamaCloudApiKey?.value || '',
         model: els.ollamaCloudModel?.value || 'gpt-oss:20b-cloud'
-      }
-    };
-    
-    await window.api.invoke('settings:set-ai-config', config);
+      };
+    } else if (provider === 'ollama-local') {
+      config.ollamaLocal = {
+        host: els.ollamaLocalHost?.value || 'http://localhost:11434',
+        model: els.ollamaLocalModel?.value || 'llama3.2:latest'
+      };
+    } else if (provider === 'openai') {
+      config.openai = {
+        endpoint: els.openaiEndpoint?.value || 'https://api.openai.com',
+        apiKey: els.openaiApiKey?.value || '',
+        model: els.openaiModel?.value || 'gpt-4o-mini'
+      };
+    }
+
+    await window.api.invoke('settings:save-ai-config', config);
+
     hideToast(loadingToast);
-    showToast('AI settings saved successfully!', 'success');
-    
-    // Close settings modal after save
-    closeSettings();
+    showToast(t('toasts.success.settingsSaved'), 'success');
   } catch (error) {
     console.error('[AI Settings] Save error:', error);
     hideToast(loadingToast);
-    showToast('Failed to save AI settings', 'error');
+    showToast(error.message || t('toasts.error.saveFailed'), 'error');
   }
 };
 

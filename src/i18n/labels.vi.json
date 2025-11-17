@@ -125,6 +125,50 @@
       "title": "Ngôn ngữ",
       "english": "🇬🇧 English",
       "vietnamese": "🇻🇳 Tiếng Việt"
+    },
+    "ai": {
+      "title": "Cấu hình nhà cung cấp AI",
+      "description": "Chọn nhà cung cấp AI và cấu hình kết nối.",
+      "provider": "Nhà cung cấp AI",
+      "save": "Lưu cài đặt",
+      "testConnection": "Kiểm tra kết nối",
+      "showHide": "Hiện/Ẩn",
+      "providers": {
+        "ollamaCloud": "☁️ Ollama Cloud",
+        "ollamaLocal": "🏠 Ollama Local",
+        "openai": "🤖 OpenAI"
+      },
+      "ollamaCloud": {
+        "title": "Ollama Cloud",
+        "description": "Lấy API key miễn phí tại <a href=\"https://ollama.com\" target=\"_blank\">ollama.com</a>",
+        "apiKey": "API Key",
+        "apiKeyPlaceholder": "Nhập Ollama Cloud API key",
+        "model": "Mô hình",
+        "models": {
+          "qwen3": "Qwen3 Coder 480B (Cloud)",
+          "gptOss120": "GPT OSS 120B (Cloud)",
+          "gptOss20": "GPT OSS 20B (Cloud) - Đề xuất",
+          "deepseek": "DeepSeek v3.1 671B (Cloud)"
+        }
+      },
+      "ollamaLocal": {
+        "title": "Ollama Local",
+        "description": "Kết nối với Ollama server cục bộ. <a href=\"https://ollama.com\" target=\"_blank\">Cài đặt Ollama</a> để bắt đầu.",
+        "serverUrl": "URL Server",
+        "serverUrlPlaceholder": "http://localhost:11434",
+        "model": "Mô hình",
+        "modelPlaceholder": "llama3.2:latest"
+      },
+      "openai": {
+        "title": "OpenAI / Tương thích OpenAI",
+        "description": "Sử dụng OpenAI API hoặc server cục bộ tương thích (vLLM, LocalAI, v.v.). Lấy API key chính thức từ <a href=\"https://platform.openai.com/api-keys\" target=\"_blank\">OpenAI Platform</a>",
+        "apiEndpoint": "API Endpoint",
+        "apiEndpointPlaceholder": "https://api.openai.com",
+        "apiKey": "API Key",
+        "apiKeyPlaceholder": "Nhập API key (hoặc bất kỳ giá trị nào cho server cục bộ)",
+        "model": "Mô hình",
+        "modelPlaceholder": "gpt-4o-mini"
+      }
     }
   },
   "modals": {
@@ -162,7 +206,10 @@
       "wordDeleted": "Đã xoá \"{word}\"",
       "dbSelected": "Đang dùng DB: {name}",
       "themeChanged": "Đã chuyển theme",
-      "scoringComplete": "Phân tích hoàn tất!"
+      "scoringComplete": "Phân tích hoàn tất!",
+      "connectionSuccess": "Kết nối thành công!",
+      "modelsAvailable": "Có {count} mô hình khả dụng",
+      "settingsSaved": "Đã lưu cài đặt thành công!"
     },
     "error": {
       "empty": "Hãy nhập giá trị",
@@ -174,10 +221,16 @@
       "analyzeFailed": "Không thể phân tích",
       "emptySentence": "Hãy nhập câu trước.",
       "scoringFailed": "Không thể chấm điểm. Vui lòng thử lại.",
-      "initFailed": "Ứng dụng không khởi tạo được."
+      "initFailed": "Ứng dụng không khởi tạo được.",
+      "apiKeyRequired": "Hãy nhập API key",
+      "unknownProvider": "Nhà cung cấp không xác định",
+      "connectionFailed": "Kết nối thất bại",
+      "saveFailed": "Lưu cài đặt thất bại"
     },
     "info": {
-      "noResults": "Không tìm thấy kết quả"
+      "noResults": "Không tìm thấy kết quả",
+      "testingConnection": "Đang kiểm tra kết nối...",
+      "savingSettings": "Đang lưu cài đặt..."
     }
   },
   "footer": {

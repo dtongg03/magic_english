@@ -390,33 +390,101 @@
           <!-- AI Provider Settings -->
           <section class="settings-section ai-settings-section">
             <div class="settings-section-header">
-              <img src="../../static/ollama-logo.svg" alt="Ollama" class="ai-provider-logo" />
-              <h4 class="settings-section-title">Ollama Cloud API Configuration</h4>
+              <h4 class="settings-section-title" data-i18n="settings.ai.title">AI Provider Configuration</h4>
             </div>
-            
-            <p class="settings-description">Configure your Ollama Cloud API key to enable AI features. Get your free API key at <a href="https://ollama.com" target="_blank">ollama.com</a></p>
+
+            <p class="settings-description" data-i18n="settings.ai.description">Choose your AI provider and configure the connection settings.</p>
+
+            <!-- Provider Selection -->
+            <label class="settings-label">
+              <span class="settings-label-text" data-i18n="settings.ai.provider">AI Provider</span>
+              <select id="ai-provider-select" class="settings-select">
+                <option value="ollama-cloud" data-i18n="settings.ai.providers.ollamaCloud">☁️ Ollama Cloud</option>
+                <option value="ollama-local" data-i18n="settings.ai.providers.ollamaLocal">🏠 Ollama Local</option>
+                <option value="openai" data-i18n="settings.ai.providers.openai">🤖 OpenAI</option>
+              </select>
+            </label>
 
             <!-- Ollama Cloud Settings -->
             <div id="ollama-cloud-settings" class="provider-settings">
+              <div class="provider-header">
+                <img src="../../static/ollama-logo.svg" alt="Ollama" class="ai-provider-logo" />
+                <span class="provider-title" data-i18n="settings.ai.ollamaCloud.title">Ollama Cloud</span>
+              </div>
+              <p class="provider-description" data-i18n="settings.ai.ollamaCloud.description">Get your free API key at <a href="https://ollama.com" target="_blank">ollama.com</a></p>
+
               <label class="settings-label">
-                <span class="settings-label-text">API Key</span>
-                <input id="ollama-cloud-api-key" type="password" class="settings-input" placeholder="Enter your Ollama Cloud API key" />
-                <button type="button" id="toggle-ollama-api-key" class="toggle-password-btn" title="Show/Hide">👁️</button>
+                <span class="settings-label-text" data-i18n="settings.ai.ollamaCloud.apiKey">API Key</span>
+                <input id="ollama-cloud-api-key" type="password" class="settings-input" data-i18n-placeholder="settings.ai.ollamaCloud.apiKeyPlaceholder" placeholder="Enter your Ollama Cloud API key" />
+                <button type="button" id="toggle-ollama-api-key" class="toggle-password-btn" data-i18n-title="settings.ai.showHide" title="Show/Hide">👁️</button>
               </label>
-              
+
               <label class="settings-label">
-                <span class="settings-label-text">Model</span>
+                <span class="settings-label-text" data-i18n="settings.ai.ollamaCloud.model">Model</span>
                 <select id="ollama-cloud-model" class="settings-select">
-                  <option value="qwen3-coder:480b-cloud">Qwen3 Coder 480B (Cloud)</option>
-                  <option value="gpt-oss:120b-cloud">GPT OSS 120B (Cloud)</option>
-                  <option value="gpt-oss:20b-cloud" selected>GPT OSS 20B (Cloud) - Recommended</option>
-                  <option value="deepseek-v3.1:671b-cloud">DeepSeek v3.1 671B (Cloud)</option>
+                  <option value="qwen3-coder:480b-cloud" data-i18n="settings.ai.ollamaCloud.models.qwen3">Qwen3 Coder 480B (Cloud)</option>
+                  <option value="gpt-oss:120b-cloud" data-i18n="settings.ai.ollamaCloud.models.gptOss120">GPT OSS 120B (Cloud)</option>
+                  <option value="gpt-oss:20b-cloud" selected data-i18n="settings.ai.ollamaCloud.models.gptOss20">GPT OSS 20B (Cloud) - Recommended</option>
+                  <option value="deepseek-v3.1:671b-cloud" data-i18n="settings.ai.ollamaCloud.models.deepseek">DeepSeek v3.1 671B (Cloud)</option>
                 </select>
               </label>
-              
+
               <button type="button" id="test-ollama-cloud" class="secondary-btn test-connection-btn">
                 <span class="btn-icon">🔌</span>
-                <span>Test Connection</span>
+                <span data-i18n="settings.ai.testConnection">Test Connection</span>
+              </button>
+            </div>
+
+            <!-- Ollama Local Settings -->
+            <div id="ollama-local-settings" class="provider-settings" style="display: none;">
+              <div class="provider-header">
+                <img src="../../static/ollama-logo.svg" alt="Ollama" class="ai-provider-logo" />
+                <span class="provider-title" data-i18n="settings.ai.ollamaLocal.title">Ollama Local</span>
+              </div>
+              <p class="provider-description" data-i18n="settings.ai.ollamaLocal.description">Connect to your local Ollama server. <a href="https://ollama.com" target="_blank">Install Ollama</a> to get started.</p>
+
+              <label class="settings-label">
+                <span class="settings-label-text" data-i18n="settings.ai.ollamaLocal.serverUrl">Server URL</span>
+                <input id="ollama-local-host" type="text" class="settings-input" data-i18n-placeholder="settings.ai.ollamaLocal.serverUrlPlaceholder" placeholder="http://localhost:11434" />
+              </label>
+
+              <label class="settings-label">
+                <span class="settings-label-text" data-i18n="settings.ai.ollamaLocal.model">Model</span>
+                <input id="ollama-local-model" type="text" class="settings-input" data-i18n-placeholder="settings.ai.ollamaLocal.modelPlaceholder" placeholder="llama3.2:latest" />
+              </label>
+
+              <button type="button" id="test-ollama-local" class="secondary-btn test-connection-btn">
+                <span class="btn-icon">🔌</span>
+                <span data-i18n="settings.ai.testConnection">Test Connection</span>
+              </button>
+            </div>
+
+            <!-- OpenAI Settings -->
+            <div id="openai-settings" class="provider-settings" style="display: none;">
+              <div class="provider-header">
+                <span class="provider-title" data-i18n="settings.ai.openai.title">OpenAI / OpenAI-Compatible</span>
+              </div>
+              <p class="provider-description" data-i18n="settings.ai.openai.description">Use OpenAI API or compatible local servers (vLLM, LocalAI, etc.). Get official API key from <a href="https://platform.openai.com/api-keys" target="_blank">OpenAI Platform</a></p>
+
+              <label class="settings-label">
+                <span class="settings-label-text" data-i18n="settings.ai.openai.apiEndpoint">API Endpoint</span>
+                <input id="openai-endpoint" type="text" class="settings-input" data-i18n-placeholder="settings.ai.openai.apiEndpointPlaceholder" placeholder="https://api.openai.com" />
+              </label>
+
+              <label class="settings-label">
+                <span class="settings-label-text" data-i18n="settings.ai.openai.apiKey">API Key</span>
+                <input id="openai-api-key" type="password" class="settings-input" data-i18n-placeholder="settings.ai.openai.apiKeyPlaceholder" placeholder="Enter your API key (or any value for local servers)" />
+                <button type="button" id="toggle-openai-api-key" class="toggle-password-btn" data-i18n-title="settings.ai.showHide" title="Show/Hide">👁️</button>
+              </label>
+
+              <label class="settings-label">
+                <span class="settings-label-text" data-i18n="settings.ai.openai.model">Model</span>
+                <input id="openai-model" type="text" class="settings-input" data-i18n-placeholder="settings.ai.openai.modelPlaceholder" placeholder="gpt-4o-mini" />
+              </label>
+
+              <button type="button" id="test-openai" class="secondary-btn test-connection-btn">
+                <span class="btn-icon">🔌</span>
+                <span data-i18n="settings.ai.testConnection">Test Connection</span>
               </button>
             </div>
           </section>
@@ -424,7 +492,7 @@
 
         <div class="modal__actions">
           <button value="cancel" class="ghost-btn" data-i18n="settings.close">Đóng</button>
-          <button type="button" id="save-ai-settings" class="primary-btn">Save Settings</button>
+          <button type="button" id="save-ai-settings" class="primary-btn" data-i18n="settings.ai.save">Save Settings</button>
         </div>
         
         <!-- Toast container inside modal for top-layer visibility -->
